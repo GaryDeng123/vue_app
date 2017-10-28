@@ -27,9 +27,36 @@
       		<div class="label">平均配送时间</div>
       		<div class="num">
       			{{seller.deliveryTime}}
-				<span>元</span>
+				<span>分钟</span>
       		</div>
       	</div>
+      </div>
+      <div class="inbetween"></div>
+      <div class="bulletinWrap">
+      	<div class="title">公告与活动</div>
+      	<p class="contents">{{seller.bulletin}}</p>
+      	<ul>
+      		<li v-for="items in seller.supports" class="singleWrap">
+      			<span :class="classMap[items.type]+'_4'" class="icon"></span>
+      			<span class="description">{{items.description}}</span>
+      		</li>
+      	</ul>
+      </div>
+      <div class="inbetween"></div>
+      <ul class="picWrap">
+      	<div class="title">商家实景</div>
+      	<div class="pics-wrap">
+	      	<li v-for="items in seller.pics" class="singlePics">
+	      		<img :src="items">
+	      	</li>
+      	</div>
+      </ul>
+      <div class="inbetween"></div>
+      <div class="infoWrap">
+      	<div class="title">商家信息</div>
+      	<ul>
+      		<li v-for="items in seller.infos" class="singleInfo">{{items}}</li>
+      	</ul>
       </div>
     </div>
 
@@ -78,6 +105,7 @@
 					this.ratings = res.data;
 				}
 			});
+			this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
 		}
 	};
 </script>
@@ -91,6 +119,7 @@
 			border-bottom: 1px solid rgba(7,17,27,0.1)
 			.name
 				font-size: 14px
+				font-weight: 600
 				color: rgb(7,17,27)
 				line-height: 14px
 				margin-bottom: 8px
@@ -111,8 +140,7 @@
 				line-height: 18px
 		.basicNumWrap
 			display: flex
-			padding: 18px 0
-			margin: 0 18px 
+			padding: 18px 
 			border-bottom: 1px solid rgba(7,17,27,0.1)
 			.wrap
 				flex: 1
@@ -133,6 +161,113 @@
 					line-height: 24px
 					span
 						font-size:10px
+		.inbetween
+			background-color: #f3f5f7
+		.bulletinWrap
+			border-top: 1px solid rgba(7,17,27,0.1)
+			border-bottom: 1px solid rgba(7,17,27,0.1)
+			padding: 18px 18px 0 18px
+			.title
+				font-weight: 600
+				font-size: 14px
+				color: rgb(7,17,27)
+				line-height: 14px
+			.contents
+				margin-top: 8px
+				padding-left:12px
+				padding-right: 12px
+				font-size: 12px
+				font-weight: 200 
+				color: rgb(240,20,20)
+				line-height: 24px
+				padding-bottom: 16px
+				border-bottom: 1px solid rgba(7,17,27,0.1)
+			ul
+				.singleWrap
+					padding: 16px 12px 
+					border-bottom: 1px solid rgba(7,17,27,0.1)
+					&:last-child
+						border: none
+					.icon
+						width: 16px
+						height: 16px
+						margin:0 12px
+						background-size: 16px 16px
+						background-repeat: no-repeat
+						display: inline-block
+						vertical-align: top
+					.decrease_4
+						background-image: url(decrease_4@2x.png)
+					.discount_4
+						background-image: url(discount_4@2x.png)
+					.guarantee_4
+						background-image: url(guarantee_4@2x.png)
+					.invoice_4
+						background-image: url(invoice_4@2x.png)
+					.special_4
+						background-image: url(special_4@2x.png)
+					@media (-webkit-min-device-pixel-ratio: 3)
+						.decrease_4
+							background-image:url(decrease_4@3x.png)
+						.discount_4
+							background-image:url(discount_4@3x.png)
+						.guarantee_4
+							background-image:url(guarantee_4@3x.png)
+						.invoice_4
+							background-image:url(invoice_4@3x.png)	
+						.special_4
+							background-image:url(special_4@3x.png)
+					.description
+						font-size: 12px
+						font-weight: 200
+						color: rgb(7,17,27)
+						line-height: 16px
+		.picWrap
+			padding: 18px
+			overflow-x: hidden
+			border-top: 1px solid rgba(7,17,27,0.1)
+			border-bottom: 1px solid rgba(7,17,27,0.1)
+			.title
+				font-size: 14px
+				font-weight: 600
+				color: rgb(7,17,27)
+				line-height: 14px
+			.pics-wrap
+				height: 120px
+				width: 100%
+				overflow-x: auto
+				white-space: nowrap
+				.singlePics
+					display: inline-block
+					margin-top: 12px
+					margin-right: 6px
+					&:last-child
+						margin-right: 0
+					img
+						height: 90px
+						width: 120px
+						background-size: 120px 90px
+						background-repeat: no-repeat
+		.infoWrap
+			padding: 18px 
+			border-top: 1px solid rgba(7,17,27,0.1)
+			border-bottom: 1px solid rgba(7,17,27,0.1)
+			.title
+				font-size: 14px
+				font-weight: 600
+				color: rgb(7,17,27)
+				line-height: 14px
+				margin-bottom: 12px
+			.singleInfo
+				padding: 16px 12px
+				border-top: 1px solid rgba(7,17,27,0.1)
+				font-size: 12px
+				font-weight: 200
+				color: rgb(7,17,27)
+				line-height: 16px
+
+
+
 
 
 </style>
