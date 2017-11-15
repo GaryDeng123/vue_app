@@ -28,16 +28,22 @@
 									<span class="oldPrice" v-show="foods.oldPrice!='' ">¥{{foods.oldPrice}}</span>
 								</div>
 							</div>
+							<div class="cartcontrol-wrapper">
+								<cartcontrol :food="foods"></cartcontrol>
+							</div>
 						</li>
 					</ul>
 				</li>
 			</ul>
 		</div>
+		<shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
 	</div>
 
 </template>
 
 <script type="text/ecmascript-6">
+	import shopcart from '../shopcart/shopcart.vue';
+	import cartcontrol from '../cartcontrol/cartcontrol.vue';
 	const ERR_OK = 0;
 	export default{
 		props: {
@@ -65,6 +71,17 @@
           return i;
         }
        }
+			},
+			selectFoods() {
+				let foods = [];
+				this.goods.forEach((good) => {
+					good.foods.forEach((food) => {
+						if (food.count) {
+							foods.push(food);
+						}
+					});
+				});
+				return foods;
 			}
 		},
 		methods: {
@@ -141,7 +158,11 @@
 					});
 				}
 			});
-		}
+		},
+		components: {
+		'shopcart': shopcart,
+		'cartcontrol': cartcontrol
+    }
 	};
 </script>
 
@@ -254,9 +275,15 @@
 	border-bottom: 1px solid;
 	border-color: rgba(7,17,27,0.1);
 	/*display: inline-block;*/
+	position: relative;
 }
 .foods-single:last-child{
 	border: none;
+}
+.foods-single>.cartcontrol-wrapper{
+	position: absolute;
+	right: 0;
+	bottom: 14px;
 }
 .foods-icon{
 	width: 60px;

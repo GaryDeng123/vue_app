@@ -113,6 +113,11 @@
 <style lang="stylus" rel="stylesheet/stylus">
 
 	.seller
+		position: absolute
+		top: 174px
+		bottom: 46px
+		width: 100%
+		overflow: auto
 		.topwrap
 			margin: 18px 18px 0 18px
 			padding-bottom: 18px

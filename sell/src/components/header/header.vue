@@ -115,7 +115,7 @@
 .avatar>img{
 	border-radius: 2px;
 }
-.content{
+.content-wrapper>.content{
 	margin-left: 16px;
 	display: inline-block;
 	vertical-align: top;
