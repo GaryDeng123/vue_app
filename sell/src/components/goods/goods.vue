@@ -67,7 +67,7 @@
         // console.log('height1=' + height1);
         // console.log('height2=' + height2);
         if (!height2 || (this.height >= height1 && this.height < height2)) {
-          console.log('%%%%%%%%%%%%%%%%' + i);
+          // console.log('%%%%%%%%%%%%%%%%' + i);
           return i;
         }
        }
@@ -85,7 +85,10 @@
 			}
 		},
 		methods: {
-			goAnchor(selector) {
+		// addFromChild(target) {
+		// 	console.log(target);
+		// },
+		goAnchor(selector) {
         var anchor = this.$el.querySelector(selector);
         var newTop = anchor.offsetTop;
         var wrapper = this.$el.querySelector('.goods>.foods-wrapper');

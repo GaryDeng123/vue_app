@@ -14,6 +14,7 @@
 	
 <script type="text/ecmascript-6">
 	import Vue from 'vue';
+	import bus from '../common/public.js';
 	export default{
 		props: {
 			food: {
@@ -31,6 +32,9 @@
 				} else {
 					this.food.count ++;
 				}
+				// console.log('++++++' + event.target);
+				// this.$emit('cartAdd', event.target);
+				bus.$emit('caradd', event.target);
 			},
 			decreaseCart() {
 				this.food.count --;

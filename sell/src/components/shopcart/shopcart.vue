@@ -17,16 +17,17 @@
 				</div>
 			</div>
 		</div>
-		<transition>
 			<div class="ball-container">
-				<div class="ball" v-for="ball in balls" v-show="ball.show"></div>
-				<div class="inner"></div>
+				<!-- <transition-group name="drop"> -->
+					<div class="ball" v-for="ball in balls" v-show="ball.show"></div>
+					<div class="inner"></div>
+				<!-- </transition-group> -->
 			</div>
-		</transition>
 	</div>
 </template>
 
 <script type="text/ecmascript-6">
+	import bus from '../common/public.js';
 	export default {
 		props: {
 			selectFoods: {
@@ -64,6 +65,12 @@
 				}
 				]
 			};
+		},
+		methods: {},
+		created() {
+			bus.$on('caradd', (res) => {
+				console.log(res);
+			});
 		},
 		computed: {
 			totalPrice() {
@@ -190,5 +197,11 @@
 				left: 32px
 				bottom: 22px
 				z-index: 200
-
+				transition: all 0.4s
+			.inner
+				width: 16px
+				height: 16px
+				border-radius: 50%
+				background: rgb(0, 160, 220)
+				transition: all 0.4s
 </style>
