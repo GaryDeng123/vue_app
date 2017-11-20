@@ -18,10 +18,16 @@
 			</div>
 		</div>
 			<div class="ball-container">
-				<!-- <transition-group name="drop"> -->
-					<div class="ball" v-for="ball in balls" v-show="ball.show"></div>
-					<div class="inner"></div>
-				<!-- </transition-group> -->
+				<div v-for="ball in balls">
+					<transition name="drop"
+											v-on:before-enter="beforeEnter"
+											v-on:enter = "enter"
+											v-on:after-enter="afterEnter">
+						<div class="ball" v-show="ball.show">
+							<div class="inner inner-hook"></div>
+						</div>
+					</transition>
+				</div>
 			</div>
 	</div>
 </template>
@@ -63,13 +69,66 @@
 				{
 					show: false
 				}
-				]
+				],
+				dropBalls: []
 			};
 		},
-		methods: {},
+		methods: {
+			drop(el) {
+					for (let i = 0; i < this.balls.length; i++) {
+					let ball = this.balls[i];
+					if (!ball.show) {
+						ball.show = true;
+						ball.el = el;
+						this.dropBalls.push(ball);
+						return;
+					}
+				}
+			},
+			beforeEnter(el) {
+					let count = this.balls.length;
+					while (count--) {
+						let ball = this.balls[count];
+						if (ball.show) {
+							let rect = ball.el.getBoundingClientRect();
+							let x = rect.left - 32;
+							let y = -(window.innerHeight - rect.top - 22);
+							// console.log('beforeEnter');
+							el.style.display = '';
+							el.style.webkitTransform = 'translateY(' + y + 'px)';
+							el.style.transform = 'translateY(' + y + 'px)';
+							let inner = el.getElementsByClassName('inner-hook')[0];
+							inner.style.webkitTransform = 'translateX(' + x + 'px)';
+							inner.style.transform = 'translateX(' + x + 'px)';
+						}
+					}
+				},
+				enter(el) {
+					/* eslint-disable no-unused-vars */
+					let rf = el.offsetHeight;
+					this.$nextTick(() => {
+					// console.log('entering');
+							el.style.webkitTransform = 'translate3D(0,0,0)';
+							el.style.transform = 'translate3D(0,0,0)';
+							let inner = el.getElementsByClassName('inner-hook')[0];
+							inner.style.webkitTransform = 'translate3D(0,0,0)';
+							inner.style.transform = 'translate3D(0,0,0)';
+							// done();
+							// let t = setTimeout(done(), 2000);
+						});
+				},
+				afterEnter(el) {
+					let ball = this.dropBalls.shift();
+					if (ball) {
+						// console.log('afterEnter');
+						ball.show = false;
+						el.style.display = 'none';
+					}
+				}
+		},
 		created() {
 			bus.$on('caradd', (res) => {
-				console.log(res);
+				this.drop(res);
 			});
 		},
 		computed: {
@@ -197,11 +256,11 @@
 				left: 32px
 				bottom: 22px
 				z-index: 200
-				transition: all 0.4s
-			.inner
-				width: 16px
-				height: 16px
-				border-radius: 50%
-				background: rgb(0, 160, 220)
-				transition: all 0.4s
+				transition: all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41)
+				.inner
+					width: 16px
+					height: 16px
+					border-radius: 50%
+					background: rgb(0, 160, 220)
+					transition: all 0.4s linear
 </style>
