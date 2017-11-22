@@ -16,7 +16,7 @@
 				<li v-for="value in goods" class="right-single right-single-hook" :id="value.name">
 					<h1>{{value.name}}</h1>
 					<ul class="foods-wrapper">
-						<li v-for="foods in value.foods" class="foods-single">
+						<li v-for="foods in value.foods" class="foods-single" @click="selectFood(foods,$event)">
 							<div class="foods-icon"><img :src="foods.icon"></div>
 							<div class="foods-text-wrapper">
 								<h1 class="name">{{foods.name}}</h1>
@@ -37,6 +37,7 @@
 			</ul>
 		</div>
 		<shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+		<food :food="selectedFood" ref="food"></food>
 	</div>
 
 </template>
@@ -44,6 +45,7 @@
 <script type="text/ecmascript-6">
 	import shopcart from '../shopcart/shopcart.vue';
 	import cartcontrol from '../cartcontrol/cartcontrol.vue';
+	import food from '../food/food.vue';
 	const ERR_OK = 0;
 	export default{
 		props: {
@@ -55,7 +57,8 @@
 			return {
 				goods: [],
 				eachTop: [],
-				height: 0
+				height: 0,
+				selectedFood: {}
 			};
 		},
 		computed: {
@@ -85,9 +88,6 @@
 			}
 		},
 		methods: {
-		// addFromChild(target) {
-		// 	console.log(target);
-		// },
 		goAnchor(selector) {
         var anchor = this.$el.querySelector(selector);
         var newTop = anchor.offsetTop;
@@ -142,14 +142,16 @@
        //    return i;
        //  }
        // }
-     }
-  },
-		// computed: {
-		// 	rightId() {
-		// 		let result = '';
-		// 		let name = this.goods.name;
-		// 	}
-		// },
+     },
+		selectFood(foods, event) {
+			// if (!event._constructed) {
+			// 	return;
+			// }
+			this.selectedFood = foods;
+			this.$refs.food.show();
+		}
+	},
+
 		created() {
 			this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
 			this.$http.get('/api/goods').then(function(res) {
@@ -164,7 +166,8 @@
 		},
 		components: {
 		'shopcart': shopcart,
-		'cartcontrol': cartcontrol
+		'cartcontrol': cartcontrol,
+		'food': food
     }
 	};
 </script>
