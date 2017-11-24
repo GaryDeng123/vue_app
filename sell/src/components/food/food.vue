@@ -28,16 +28,16 @@
 			<div class="divide" v-show="food.info"></div>
 			<div class="ratings-wrap">
 				<div class="title">商品评价</div>
-				<div class="label">
-					<span class="all">
+				<div class="label-wrap">
+					<span class="all label">
 						全部
 						<span class="num">{{foodCount}}</span>
 					</span>
-					<span class="recommend">
+					<span class="recommend label">
 						推荐
 						<span class="num">{{foodRecommend}}</span>
 					</span>
-					<span class="diss">
+					<span class="diss label">
 						吐槽
 						<span class="num">{{foodDiss}}</span>
 					</span>
@@ -198,6 +198,36 @@
 				color:rgb(77,85,93)
 				line-height:24px
 				margin: 6px 8px
+		.ratings-wrap
+			padding:18px
+			.title
+				margin-bottom:6px
+				font-size:14px
+				color:rgb(7,17,27)
+				line-height:14px
+			.label-wrap
+				margin-top:12px
+				padding-bottom:18px
+				border-bottom:1px solid rgba(7,17,27,0.1)
+				.label
+					padding:8px 12px
+					margin-right:8px
+					font-size:12px
+					line-height:16px
+					.num
+						font-size:8px
+				.all
+					background-color:rgb(0,160,220)
+					border-radius:1px
+					color:#FFF
+				.recommend
+					background-color:rgba(0,160,220,0.2)
+					border-radius:1px
+					color:rgb(77,85,93)
+				.diss
+					background-color:rgba(77,85,93,0.2)
+					border-radius:1px
+					color:rgb(77,85,93)
 
 
 
