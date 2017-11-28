@@ -42,12 +42,17 @@
 						<span class="num">{{foodDiss}}</span>
 					</span>
 				</div>
+			</div>
+				<div class="content-only">
+					<span class="icon-check_circle icon"></span>
+					<span class="text">只看有内容的评价</span>
+				</div>
 				<ul>
 					<li v-for="item in food.ratings" class="rating-single">
 						{{item.text}}
 					</li>
 				</ul>
-			</div>
+			
 		</div>
 	</transition>
 </template>
@@ -199,7 +204,7 @@
 				line-height:24px
 				margin: 6px 8px
 		.ratings-wrap
-			padding:18px
+			padding:18px 18px 0 18px
 			.title
 				margin-bottom:6px
 				font-size:14px
@@ -228,6 +233,20 @@
 					background-color:rgba(77,85,93,0.2)
 					border-radius:1px
 					color:rgb(77,85,93)
+		.content-only
+			padding:12px 18px
+			border-bottom:1px solid rgba(7,17,27,0.1)
+			.icon-check_circle
+				font-size:24px
+				color:rgb(147,153,159)
+				line-height:24px
+			.text
+				margin-left:8px
+				font-size:12px
+				color:rgb(147,153,159)
+				line-height:24px
+
+
 
 
 
