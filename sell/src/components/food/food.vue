@@ -29,29 +29,39 @@
 			<div class="ratings-wrap">
 				<div class="title">商品评价</div>
 				<div class="label-wrap">
-					<span class="all label">
+					<span class="all label" @click.stop="showAll">
 						全部
 						<span class="num">{{foodCount}}</span>
 					</span>
-					<span class="recommend label">
+					<span class="recommend label" @click.stop="recommendShow">
 						推荐
 						<span class="num">{{foodRecommend}}</span>
 					</span>
-					<span class="diss label">
+					<span class="diss label" @click.stop="dissShow">
 						吐槽
 						<span class="num">{{foodDiss}}</span>
 					</span>
 				</div>
 			</div>
-				<div class="content-only">
-					<span class="icon-check_circle icon"></span>
-					<span class="text">只看有内容的评价</span>
-				</div>
+			<div class="content-only">
+				<span class="icon-check_circle icon" @click.stop="textShow" :class="checkicon"></span>
+				<span class="text">只看有内容的评价</span>
+			</div>
+			<div class="ratings-detail-wrap">
 				<ul>
-					<li v-for="item in food.ratings" class="rating-single">
-						{{item.text}}
+					<li v-for="item in food.ratings" class="rating-single" v-show="(textShowFlag||item.text)&&(recommendFlag||!item.rateType)&&(dissFlag||item.rateType)">
+
+							<div class="time">{{item.rateTime | time}}</div>
+							<span :class="classMap[item.rateType]" class="icon"></span>
+							<span class="text">{{item.text}}</span>
+							<div class="name-pic-wrap">
+								<div class="name">{{item.username}}</div>
+								<div class="pic"><img :src="item.avatar"></div>
+							</div>
+
 					</li>
 				</ul>
+			</div>
 			
 		</div>
 	</transition>
@@ -68,19 +78,45 @@
 		},
 		data() {
 			return {
-				showFlag: false
+				showFlag: false,
+				classMap: ['icon-thumb_up', 'icon-thumb_down'],
+				textShowFlag: true,
+				recommendFlag: true,
+				dissFlag: true
 			};
 		},
 		methods: {
 			show() {
 				this.showFlag = !this.showFlag;
+				this.textShowFlag = true;
+				this.recommendFlag = true;
+				this.dissFlag = true;
 			},
 			addCart() {
 				Vue.set(this.food, 'count', 1);
+			},
+			textShow() {
+				this.textShowFlag = !this.textShowFlag;
+			},
+			recommendShow() {
+				this.recommendFlag = false;
+			},
+			dissShow() {
+				this.dissFlag = false;
+			},
+			showAll() {
+				this.recommendFlag = true;
+				this.dissFlag = true;
 			}
 		},
 		components: {
 			'cartcontrol': cartcontrol
+		},
+		filters: {
+			time: function (value) {
+				let d = new Date(parseInt(value));
+				return (d.getFullYear()) + '-' + (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1)) + '-' + (d.getDate() > 9 ? d.getDate() : '0' + d.getDate()) + ' ' + (d.getHours() > 9 ? d.getHours() : '0' + d.getHours()) + ':' + (d.getMinutes() > 9 ? d.getMinutes() : '0' + d.getMinutes()) + ':' + (d.getSeconds() > 9 ? d.getSeconds() : '0' + d.getSeconds());
+			}
 		},
 		computed: {
 			foodCount() {
@@ -88,6 +124,15 @@
 					return;
 				}
 				return this.food.ratings.length;
+			},
+			checkicon() {
+				if (this.textShowFlag === true) {
+					let con = 'icon-on';
+					return con;
+				} else {
+					let con = 'icon-off';
+					return con;
+				}
 			},
 			foodRecommend() {
 				if (!this.food.ratings) {
@@ -236,15 +281,67 @@
 		.content-only
 			padding:12px 18px
 			border-bottom:1px solid rgba(7,17,27,0.1)
-			.icon-check_circle
+			.icon
 				font-size:24px
-				color:rgb(147,153,159)
 				line-height:24px
+			.icon-on
+				color:rgb(147,153,159)
+			.icon-off
+				color:rgb(0,160,220)
 			.text
 				margin-left:8px
 				font-size:12px
 				color:rgb(147,153,159)
 				line-height:24px
+		.ratings-detail-wrap
+			margin:0 18px
+			.rating-single
+				position:relative
+				padding:16px 0
+				font-size:0
+				border-bottom:1px solid rgba(7,17,27,0.1)
+				.time
+					font-size:10px
+					color:rgb(147,153,159)
+					line-height:12px
+				.text
+					display:inline-block
+					font-size:12px
+					color:rgb(7,17,27)
+					line-height:16px
+					margin-left:4px
+					margin-top:6px
+				.icon
+					display:inline-block
+					font-size:12px
+					line-height:16px
+					margin-top:6px
+				.icon-thumb_up
+					color: rgb(0,160,220)
+				.icon-thumb_down
+					color: rgb(183,187,191)
+				.name-pic-wrap
+					position:absolute
+					top:16px
+					right:0px
+					.name
+						display:inline-block
+						font-size:10px
+						color:rgb(147,153,159)
+						line-height:12px
+					.pic
+						display:inline-block
+						margin-left:6px
+						width:12px
+						height:12px
+						left: 6px
+						vertical-align:top
+						img
+							width:12px
+							height:12px
+							background-size: 12px 12px
+							border-radius:50%
+
 
 
 
