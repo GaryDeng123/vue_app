@@ -29,39 +29,41 @@
       <div class="background">
       	<img :src="seller.avatar">
       </div>
-      <div class="detail" v-show="detailShow">
-      	<div class="detail-wrapper clearfix">
-      		<div class="detail-main">
-      			<h1 class="name">{{seller.name}}</h1>
-      			<div class="star-wrapper">
-      				<star :size="48" :score="seller.score"></star>
-      			</div>
-      			<div class="info-wrapper">
-      				<div class="info-left"></div>
-      				<div class="info-main">优惠信息</div>
-      				<div class="info-right"></div>
-      			</div>
-      			<div class="info-detail">
-      				<div v-for="value in seller.supports" class="info-single-wrapper">
-      					<span :class="classMap[value.type]+'_2'" class="info-icon"></span>
-      					<span class="info-text">{{value.description}}</span>
-      				</div>
-      			</div>
-      			<div class="info-wrapper">
-      				<div class="info-left"></div>
-      				<div class="info-main">商家公告</div>
-      				<div class="info-right"></div>
-      			</div>
-      			<div class="info-bulletin">
-      				{{seller.bulletin}}
-      			</div>
-      			
-      		</div>
-      	</div>
-      	<div class="detail-close">
-      		<span class="icon-close" @click="closeDetail"></span>
-      	</div>
-      </div>
+      <transition name="detail">
+     	 <div class="detail" v-show="detailShow">
+	      	<div class="detail-wrapper clearfix">
+	      		<div class="detail-main">
+	      			<h1 class="name">{{seller.name}}</h1>
+	      			<div class="star-wrapper">
+	      				<star :size="48" :score="seller.score"></star>
+	      			</div>
+	      			<div class="info-wrapper">
+	      				<div class="info-left"></div>
+	      				<div class="info-main">优惠信息</div>
+	      				<div class="info-right"></div>
+	      			</div>
+	      			<div class="info-detail">
+	      				<div v-for="value in seller.supports" class="info-single-wrapper">
+	      					<span :class="classMap[value.type]+'_2'" class="info-icon"></span>
+	      					<span class="info-text">{{value.description}}</span>
+	      				</div>
+	      			</div>
+	      			<div class="info-wrapper">
+	      				<div class="info-left"></div>
+	      				<div class="info-main">商家公告</div>
+	      				<div class="info-right"></div>
+	      			</div>
+	      			<div class="info-bulletin">
+	      				{{seller.bulletin}}
+	      			</div>
+	      			
+	      		</div>
+	      	</div>
+	      	<div class="detail-close">
+	      		<span class="icon-close" @click="closeDetail"></span>
+	      	</div>
+	      </div>
+      </transition>
     </div>
 
 </template>
@@ -290,6 +292,13 @@
 	height: 100%;
 	overflow: auto;
 	background-color: rgba(7,17,27,0.8);
+	transition: all 0.5s linear;
+}
+.detail-enter-to,.detail-leave{
+	opacity:1;
+}
+.detail-enter,.detail-leave-to{
+	opacity:0;
 }
 .detail-wrapper{
 	min-height: 100%;

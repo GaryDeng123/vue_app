@@ -136,20 +136,16 @@
 					/* eslint-disable no-unused-vars */
 					let rf = el.offsetHeight;
 					this.$nextTick(() => {
-					// console.log('entering');
 							el.style.webkitTransform = 'translate3D(0,0,0)';
 							el.style.transform = 'translate3D(0,0,0)';
 							let inner = el.getElementsByClassName('inner-hook')[0];
 							inner.style.webkitTransform = 'translate3D(0,0,0)';
 							inner.style.transform = 'translate3D(0,0,0)';
-							// done();
-							// let t = setTimeout(done(), 2000);
 						});
 				},
 				afterEnter(el) {
 					let ball = this.dropBalls.shift();
 					if (ball) {
-						// console.log('afterEnter');
 						ball.show = false;
 						el.style.display = 'none';
 					}
