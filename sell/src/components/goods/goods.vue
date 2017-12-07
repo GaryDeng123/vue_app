@@ -57,7 +57,6 @@
 		data() {
 			return {
 				goods: [],
-				passfoods: [],
 				eachTop: [],
 				height: 0,
 				selectedFood: {}
@@ -88,26 +87,8 @@
 				});
 				return foods;
 			}
-			// selectFoods() {
-			// 	let foods = [];
-			// 		this.passfoods.forEach((food) => {
-			// 			if (food.count) {
-			// 				foods.push(food);
-			// 			}
-			// 		});
-			// 	return foods;
-			// }
 		},
 		methods: {
-			dopassfoods() {
-				this.goods.forEach((good) => {
-					good.foods.forEach((food) => {
-						if (food.count) {
-							this.passfoods.push(food);
-						}
-					});
-				});
-		},
 		goAnchor(selector) {
         var anchor = this.$el.querySelector(selector);
         var newTop = anchor.offsetTop;
@@ -186,16 +167,6 @@
 					});
 				}
 			});
-			bus.$on('passfoods', (res) => {
-				this.passfoods = res;
-				// console.log(res);
-				// this.dopassfoods();
-			});
-		},
-		beforeDestroy() {
-			// bus.$emit('passfoods', this.selectFoods);
-			this.dopassfoods();
-			bus.$emit('passfoods', this.passfoods);
 		},
 		components: {
 		'shopcart': shopcart,

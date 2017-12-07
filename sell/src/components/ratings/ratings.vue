@@ -52,14 +52,11 @@
 				</li>
 			</ul>
 		</div>
-		<shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
-	import bus from '../common/public.js';
 	import star from '../star/star.vue';
-	import shopcart from '../shopcart/shopcart.vue';
 	const ERR_OK = 0;
 	// const THUMB_UP = 'on';
 	// const THUMB_DOWN = 'off';
@@ -71,27 +68,16 @@
 		},
 		data() {
 			return {
-				ratings: [],
-				passfoods: []
+				ratings: []
 			};
 		},
 		computed: {
 			itemClasses() {
 				// let result = [];
-			},
-			selectFoods() {
-				let foods = [];
-					this.passfoods.forEach((food) => {
-						if (food.count) {
-							foods.push(food);
-						}
-					});
-				return foods;
 			}
 		},
 		components: {
-			'star': star,
-			'shopcart': shopcart
+			'star': star
 		},
 		filters: {
 			time: function (value) {
@@ -108,14 +94,6 @@
 					// console.log(this.ratings);
 				}
 			});
-			bus.$on('passfoods', (res) => {
-				this.passfoods = res;
-				console.log(res);
-			});
-		},
-		beforeDestroy() {
-			// bus.$emit('passfoods', this.selectFoods);
-			bus.$emit('passfoods', this.passfoods);
 		}
 	};
 </script>

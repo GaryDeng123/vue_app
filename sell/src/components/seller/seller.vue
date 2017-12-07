@@ -58,15 +58,12 @@
       		<li v-for="items in seller.infos" class="singleInfo">{{items}}</li>
       	</ul>
       </div>
-      	<shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
     </div>
 
 </template>
 
 <script type="text/ecmascript-6">
-	import bus from '../common/public.js';
 	import star from '../star/star.vue';
-	import shopcart from '../shopcart/shopcart.vue';
 	const ERR_OK = 0;
 	export default{
 		props: {
@@ -77,7 +74,6 @@
 		data() {
 			return {
 				goods: [],
-				passfoods: [],
 				ratings: []
 			};
 		},
@@ -91,20 +87,10 @@
 					}
 				}
 				return result;
-			},
-			selectFoods() {
-				let foods = [];
-					this.passfoods.forEach((food) => {
-						if (food.count) {
-							foods.push(food);
-						}
-					});
-				return foods;
 			}
 		},
 		components: {
-			'star': star,
-			'shopcart': shopcart
+			'star': star
 		},
 		created() {
 			this.$http.get('/api/goods').then(function(res) {
@@ -120,13 +106,6 @@
 				}
 			});
 			this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-			bus.$on('passfoods', (res) => {
-				this.passfoods = res;
-			});
-		},
-		beforeDestroy() {
-			// bus.$emit('passfoods', this.selectFoods);
-			bus.$emit('passfoods', this.passfoods);
 		}
 	};
 </script>
