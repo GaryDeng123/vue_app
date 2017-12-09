@@ -58,8 +58,6 @@
 <script type="text/ecmascript-6">
 	import star from '../star/star.vue';
 	const ERR_OK = 0;
-	// const THUMB_UP = 'on';
-	// const THUMB_DOWN = 'off';
 	export default{
 		props: {
 			seller: {
@@ -73,7 +71,6 @@
 		},
 		computed: {
 			itemClasses() {
-				// let result = [];
 			}
 		},
 		components: {
@@ -91,7 +88,6 @@
 				res = res.body;
 				if (res.errno === ERR_OK) {
 					this.ratings = res.data;
-					// console.log(this.ratings);
 				}
 			});
 		}
