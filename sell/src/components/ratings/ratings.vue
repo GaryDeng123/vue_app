@@ -1,5 +1,5 @@
 <template>
-	<div class="ratings">
+	<div class="ratings" ref="ratingsWrapper">
 		<div class="comments-wrap">
 			<div class="seller-wrap">
 				<div class="left">
@@ -56,6 +56,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+	import BScroll from 'better-scroll';
 	import star from '../star/star.vue';
 	const ERR_OK = 0;
 	export default{
@@ -82,12 +83,20 @@
 								return (d.getFullYear()) + '-' + (d.getMonth() + 1 > 9 ? d.getMonth() + 1 : '0' + (d.getMonth() + 1)) + '-' + (d.getDate() > 9 ? d.getDate() : '0' + d.getDate()) + ' ' + (d.getHours() > 9 ? d.getHours() : '0' + d.getHours()) + ':' + (d.getMinutes() > 9 ? d.getMinutes() : '0' + d.getMinutes()) + ':' + (d.getSeconds() > 9 ? d.getSeconds() : '0' + d.getSeconds());
 			}
 		},
+		methods: {
+			_initScroll() {
+				this.wrapScroll = new BScroll(this.$refs.ratingsWrapper);
+			}
+		},
 		created() {
 			this.classMap = ['icon-thumb_down', 'icon-thumb_up'];
 			this.$http.get('/api/ratings').then(function(res) {
 				res = res.body;
 				if (res.errno === ERR_OK) {
 					this.ratings = res.data;
+					this.$nextTick(() => {
+						this._initScroll();
+					});
 				}
 			});
 		}
@@ -97,11 +106,12 @@
 <style type="text/css">
 	.ratings{
 		width: 100%;
+		/*height: 400px;*/
 		position: absolute;
 		top: 174px;
 		bottom: 0px;
 		width: 100%;
-		overflow: auto;
+		overflow: hidden;
 	}
 	.inbetween{
 		height: 18px;

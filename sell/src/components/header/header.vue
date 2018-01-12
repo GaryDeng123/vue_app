@@ -292,7 +292,7 @@
 	height: 100%;
 	overflow: auto;
 	background-color: rgba(7,17,27,0.8);
-	transition: all 0.5s linear;
+	transition: all 0.3s linear;
 }
 .detail-enter-to,.detail-leave{
 	opacity:1;

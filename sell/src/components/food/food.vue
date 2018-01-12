@@ -216,15 +216,16 @@
 						font-weight:normal
 			.addtoCart
 				position: absolute
-				width: 74px
+				width: 84px
 				height:24px
-				padding:6px 12px
+				text-align:center
+				// padding:6px 12px
 				box-sizing:border-box
 				right:18px
 				bottom:18px
 				font-size:10px
 				color:#FFF
-				line-height:12px
+				line-height:24px
 				background-color:rgb(0,160,220)
 				border-radius:12px
 			.cartcontrol-wrapper

@@ -1,8 +1,8 @@
 <template>
 	<div class="goods">
-		<div class="menu-wrapper">
+		<div class="menu-wrapper" ref="menuWrapper">
 			<ul>
-				<li v-for="(value,index) in goods" class="left-single" @click="goAnchor('#' + value.name)" 
+				<li v-for="(value,index) in goods" class="left-single" @click="selectMenu(index,$event)" 
 				:class="{'current':currentIndex === index}">
 					<span class="text">
 						<span v-show="value.type>0" class="icon" :class="classMap[value.type]"></span>
@@ -11,7 +11,7 @@
 				</li>
 			</ul>
 		</div>
-		<div class="foods-wrapper" @scroll="getNowHeight()">
+		<div class="foods-wrapper" ref="foodsWrapper">
 			<ul>
 				<li v-for="value in goods" class="right-single right-single-hook" :id="value.name">
 					<h1>{{value.name}}</h1>
@@ -43,6 +43,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+	import BScroll from 'better-scroll';
 	import bus from '../common/public.js';
 	import shopcart from '../shopcart/shopcart.vue';
 	import cartcontrol from '../cartcontrol/cartcontrol.vue';
@@ -59,22 +60,28 @@
 				goods: [],
 				eachTop: [],
 				height: 0,
-				selectedFood: {}
+				selectedFood: {},
+				listHeight: [],
+				scrollY: 0
 			};
 		},
 		computed: {
 			currentIndex() {
-				for (let i = 0; i < this.eachTop.length; i++) {
-        let height1 = this.eachTop[i];
-        let height2 = this.eachTop[i + 1];
-        // console.log('height=' + this.height);
-        // console.log('height1=' + height1);
-        // console.log('height2=' + height2);
-        if (!height2 || (this.height >= height1 && this.height < height2)) {
-          // console.log('%%%%%%%%%%%%%%%%' + i);
-          return i;
-        }
+				// for (let i = 0; i < this.eachTop.length; i++) {
+    //     let height1 = this.eachTop[i];
+    //     let height2 = this.eachTop[i + 1];
+    //     if (!height2 || (this.height >= height1 && this.height < height2)) {
+    //       return i;
+    //     }
+    //    }
+       for (let i = 0; i < this.listHeight.length; i++) {
+       let height1 = this.listHeight[i];
+       let height2 = this.listHeight[i + 1];
+       if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+       return i;
        }
+       }
+       return 0;
 			},
 			selectFoods() {
 				let foods = [];
@@ -127,6 +134,16 @@
         this.eachTop.push(foodList[i].offsetTop);
       }
      },
+     selectMenu(index, event) {
+     // better-scroll 对 移动端派发的事件，event._constructed是true的。
+			if (!event._constructed) {
+				return;
+			}
+			console.log(index);
+			let foodList = this.$el.getElementsByClassName('right-single-hook');
+			let el = foodList[index];
+			this.foodsScroll.scrollToElement(el, 400);
+     },
      getNowHeight() {
        var wrapper = this.$el.querySelector('.goods>.foods-wrapper');
        var height = wrapper.scrollTop;
@@ -150,6 +167,28 @@
 			// }
 			this.selectedFood = foods;
 			this.$refs.food.show();
+		},
+		_initScroll() {
+			this.meunScroll = new BScroll(this.$refs.menuWrapper, {
+				click: true
+			});
+			this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
+				click: true,
+				probeType: 3
+			});
+			this.foodsScroll.on('scroll', (pos) => {
+				this.scrollY = Math.abs(Math.round(pos.y));
+			});
+		},
+		_calculateHeight() {
+      let foodList = this.$el.getElementsByClassName('right-single-hook');
+      let height = 0;
+      this.listHeight.push(height);
+      for (let i = 0; i < foodList.length; i++) {
+				let item = foodList[i];
+				height += item.clientHeight;
+				this.listHeight.push(height);
+      }
 		}
 	},
 
@@ -164,6 +203,8 @@
 					this.goods = res.data;
 					this.$nextTick(() => {
 						this.getEachHeight();
+						this._initScroll();
+						this._calculateHeight();
 					});
 				}
 			});
@@ -189,7 +230,7 @@
 		flex: 0 0 80px;
 		width: 80px;
 		background-color: #f3f5f7;
-		overflow: auto;
+		/*overflow: auto;*/
 	}
 	.current{
 		font-weight: 700;
@@ -198,7 +239,7 @@
 	.foods-wrapper{
 		flex: 1;
 		background-color: #f3f5f7;
-		overflow: auto;
+		/*overflow: auto;*/
 	}
 	.left-single{
 		display: flex;

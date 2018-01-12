@@ -1,5 +1,6 @@
 <template>
-	<div class="seller">
+	<div class="seller"  ref="sellerWrap">
+	<div class="sellerWrap">
       <div class="topwrap">
       	<div class="name">{{this.seller.name}}</div>
       	<div class="starwrap">
@@ -45,10 +46,12 @@
       <div class="inbetween"></div>
       <ul class="picWrap">
       	<div class="title">商家实景</div>
-      	<div class="pics-wrap">
-	      	<li v-for="items in seller.pics" class="singlePics">
-	      		<img :src="items">
-	      	</li>
+      	<div class="pics-wrap" ref="picWrap">
+      		<ul class="pic-list" ref="picList">
+		      	<li v-for="items in seller.pics" class="singlePics">
+		      		<img :src="items">
+		      	</li>
+	      	</ul>
       	</div>
       </ul>
       <div class="inbetween"></div>
@@ -58,11 +61,13 @@
       		<li v-for="items in seller.infos" class="singleInfo">{{items}}</li>
       	</ul>
       </div>
+      </div>
     </div>
 
 </template>
 
 <script type="text/ecmascript-6">
+	import BScroll from 'better-scroll';
 	import star from '../star/star.vue';
 	const ERR_OK = 0;
 	export default{
@@ -92,6 +97,13 @@
 		components: {
 			'star': star
 		},
+		methods: {
+			_initScroll() {
+				this.sellerScroll = new BScroll(this.$refs.sellerWrap, {
+					click: true
+				});
+			}
+		},
 		created() {
 			this.$http.get('/api/goods').then(function(res) {
 				res = res.body;
@@ -106,6 +118,22 @@
 				}
 			});
 			this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+			this.$nextTick(() => {
+				this._initScroll();
+
+				if (this.seller.pics) {
+					let picWidth = 120;
+					let margin = 6;
+					let width = (picWidth + margin) * this.seller.pics.length - margin;
+					this.$refs.picList.style.width = width + 'px';
+					this.$nextTick(() => {
+						this.picScroll = new BScroll(this.$refs.picWrap, {
+							scrollX: true,
+							eventPassthrough: 'vertical'
+						});
+					});
+				}
+			});
 		}
 	};
 </script>
@@ -117,7 +145,10 @@
 		top: 174px
 		bottom: 0px
 		width: 100%
-		overflow: auto
+		// height: 100%
+		overflow: hidden
+		// .sellerWrap
+		// 	height: 100%
 		.topwrap
 			margin: 18px 18px 0 18px
 			padding-bottom: 18px
@@ -240,7 +271,7 @@
 			.pics-wrap
 				height: 120px
 				width: 100%
-				overflow-x: auto
+				overflow-x: hidden
 				white-space: nowrap
 				.singlePics
 					display: inline-block
